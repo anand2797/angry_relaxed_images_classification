@@ -282,7 +282,50 @@ git push origin <branch_name>
 2. **Run the Application**:
    - Clone or pull the repository on another system to test if the setup and application work as intended.
    - Follow the setup instructions provided above.
+   - How to Access Data from DVC
+   - If you want to clone this any repository and download the data tracked by DVC from the local remote, follow the steps below:
 
+    ### 2.1. Clone the Repository
+    - Clone the repository to your local machine by running the following command:
+   ```
+   git clone <repository-url>
+   cd <repository-directory>
+   ```
+   ### 2.2 Check the DVC Remote Configuration
+   - After cloning the repository, check the current DVC remote configuration to see where the data is being stored:
+   ```
+   dvc remote list
+   ```
+   - This will display the remote storage currently configured for DVC. 
+   - If it points to a local path, for example, `../dvc_remote`, this means the data is stored in a directory relative to the original system.
+
+   ### 2.3. Configure the Local DVC Remote (if needed)
+   - If you're not using the same directory structure as the original repository owner, you may need to update the remote path to point to a local directory on your machine.
+   - To configure your local remote, run the following command 
+   ```
+   dvc remote add -d myremote <path-to-your-local-dvc-storage>
+   ```
+   - replace <path-to-your-local-dvc-storage> with the actual path on your system: For example
+   ```
+   dvc remote add -d myremote /path/to/your/dvc_remote
+   ```
+   ### 2.4. Pull the Data
+   - Once the DVC remote is correctly configured, you can pull the data tracked by DVC with the following command:
+   ```
+   dvc pull
+   ```
+   - This will download all the data (e.g., images, models, etc.) from the remote storage to your local machine.
+
+   ### 2.5. Verify the Data
+   - After running dvc pull, verify that the data has been successfully downloaded by checking the relevant directories:
+   ```
+   ls data/       # to check folders and files in data/ folder , downloaded or not.
+   ls models/     # to check trained deep learning model in models/ folder
+   ```
+   - You should now have access to the dataset and models required to run the project.
+
+   - I you can't access dvc tracked dataset and model by above steps, then please update this file, and give the note about it at end of this file, we will learn more about dvc and its features together. 
+   
 3. **Collaborate or Share**:
    - Share the repository link with team members or on platforms like LinkedIn, GitHub Profile, or portfolio.
 
