@@ -5,3 +5,4 @@ scikit-learn
 tensorflow
 opencv-python
 flask
+dvc
