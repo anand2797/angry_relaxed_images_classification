@@ -7,3 +7,4 @@ opencv-python
 flask
 dvc
 waitress
+dvc-s3
