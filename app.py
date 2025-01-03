@@ -3,15 +3,43 @@ from tensorflow.keras.models import load_model
 import numpy as np
 import cv2
 import os
-
+import boto3
+import subprocess
 app = Flask(__name__)
 
-# Load your pre-trained model
+
+
+"""# Load your pre-trained model
 try:
-    model = load_model(os.path.join('models', 'Angry_Relaxed_Image_Classification.keras'))
+   # model = load_model(os.path.join('models', 'Angry_Relaxed_Image_Classification.keras'))
+   S3 URL of the model (replace with your actual S3 model URL)
+    
 except Exception as e:
     app.logger.error(f"Error loading model: {e}")
-    raise
+    raise"""
+
+
+# Function to fetch the model from S3 using DVC and load it
+def fetch_and_load_model():
+    # Run 'dvc pull' to fetch the model from the remote (S3) to the local environment
+    result = subprocess.run(['dvc', 'pull'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    
+    if result.returncode == 0:
+        print("Model fetched successfully!")
+    else:
+        print(f"Error fetching model: {result.stderr.decode('utf-8')}")
+        return None
+
+    # After fetching the model, load it from the local path
+    model_path = os.path.join('models', 'Angry_Relaxed_Image_Classification.keras')  # Adjust this to the local path where the model is stored
+    try:
+        model = load_model(model_path)
+        print("Model loaded successfully.")
+        return model
+    except Exception as e:
+        print(f"Error loading model: {str(e)}")
+        return None
+model = fetch_and_load_model()
 
 # Define image size for the model
 IMAGE_SIZE = (256, 256)  # Update according to your model's expected input size
@@ -102,4 +130,4 @@ def index():
 if __name__ == '__main__':
     if not os.path.exists('static/uploads'):
         os.makedirs('static/uploads')
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000, debug=True)
